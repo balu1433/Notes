@@ -1,0 +1,35 @@
+Step1 : Prerequisites
+  AWS account, AWS IAM username and password, an amazon EC2 key pair, and a configuraiton VPC[Virtual private cloud]
+ 
+Step2 : Launch an EC2 instance
+  you can launch EC2 instance after creating a network security group 
+
+Step3 : Install Jenkins
+  =>Connect to your EC2 instance 
+     --> ssh -i {yourpemfile}.pem ec2user@{yourPublicIP}
+  =>Download and install Jenkins
+      -->yum install java
+      -->wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+      -->rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+      -->yum install jenkins
+      -->service jenkins start/stop/restart
+      -->chkconfig jenkins on
+      
+   The above steps will install Jenkins and runs as deamon  [Service] to run Jenkins as a process follow below steps.
+        you can download jar file from jenkins.repo 
+        run war file as a process
+       
+       -->java -jar jenkins.war --httpPort=-1 --httpsPort={port}
+       
+     
+     
+     
+  if you are using internal firewall from system please run below
+    firewall-cmd --permanent --new-service=jenkins
+    firewall-cmd --permanent --service=jenkins --set-short="Jenkins Service Ports"
+    firewall-cmd --permanent --service=jenkins --set-description="Jenkins service firewalld port exceptions"
+    firewall-cmd --permanent --service=jenkins --add-port=8080/tcp
+    firewall-cmd --permanent --add-service=jenkins
+    firewall-cmd --zone=public --add-service=http --permanent
+    firewall-cmd --reload
+    firewall-cmd --list-all
